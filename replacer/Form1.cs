@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,9 +15,11 @@ namespace replacer
 {
     public partial class Form1 : Form
     {
+        private List<Rule> rules;
         public Form1()
         {
             InitializeComponent();
+            rules = new List<Rule>();
         }
         private void replaceText()
         {
@@ -24,8 +27,11 @@ namespace replacer
             string output = input;
             try
             {
-                output = Regex.Replace(input, tb_toReplace.Text, tb_replacement.Text);
-                l_Message.Text = "";
+                foreach (Rule rule in rules)
+                {
+                    output = Regex.Replace(input, rule.Expression, rule.Replacement);
+                    l_Message.Text = "";
+                }
             }
             catch (Exception e)
             {
@@ -45,17 +51,19 @@ namespace replacer
             {
                 return;
             }
-            //TODO: Fix highlighting (regex matches not being correctly highlighted)
             try
             {
                 unhighlight();
-                MatchCollection matches = Regex.Matches(rtb_Old.Text, tb_toReplace.Text);
-                foreach (Match match in matches)
+                foreach (Rule rule in rules)
                 {
-                    rtb_Old.Select(match.Index, match.Length);
-                    rtb_Old.SelectionColor = Color.White;
-                    rtb_Old.SelectionBackColor = Color.Blue;
-                    rtb_Old.DeselectAll();
+                    MatchCollection matches = Regex.Matches(rtb_Old.Text, rule.Expression);
+                    foreach (Match match in matches)
+                    {
+                        rtb_Old.Select(match.Index, match.Length);
+                        rtb_Old.SelectionColor = rule.RuleColor;
+                        rtb_Old.SelectionBackColor = Color.Blue;
+                        rtb_Old.DeselectAll();
+                    }
                 }
             }
             catch (Exception e) {
@@ -103,6 +111,16 @@ namespace replacer
             {
                 unhighlight();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            RuleManager rm = new RuleManager();
+            rm.SetRules(rules);
+            Action a = new Action(() => { });
+            rm.RuleChanged += () => { this.BeginInvoke(new Action(() => { regexText(); })); };
+            WaitCallback wc = new WaitCallback((obj)=> { rm.ShowDialog(); });
+            ThreadPool.QueueUserWorkItem(wc);
         }
     }
 }

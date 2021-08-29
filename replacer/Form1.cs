@@ -29,6 +29,10 @@ namespace replacer
             {
                 foreach (Rule rule in rules)
                 {
+                    if (!rule.Enabled)
+                    {
+                        continue;
+                    }
                     output = Regex.Replace(output, rule.Expression, rule.Replacement);
                     l_Message.Text = "";
                 }
@@ -48,6 +52,8 @@ namespace replacer
         private Color chooseTextColor(Color bg)
         {
             return Color.FromArgb(255 - bg.R, 255 - bg.G, 255- bg.B);
+            //int v = 128;
+            //return Color.FromArgb((v + bg.R)%255, (v + bg.G)%255, (v + bg.B)%255);
         }
         private void highlight()
         {
@@ -60,6 +66,10 @@ namespace replacer
                 unhighlight();
                 foreach (Rule rule in rules)
                 {
+                    if (!rule.Enabled)
+                    {
+                        continue;
+                    }
                     MatchCollection matches = Regex.Matches(rtb_Old.Text, rule.Expression);
                     foreach (Match match in matches)
                     {
@@ -123,8 +133,11 @@ namespace replacer
             rm.SetRules(rules);
             Action a = new Action(() => { });
             rm.RuleChanged += () => { this.BeginInvoke(new Action(() => { regexText(); })); };
-            WaitCallback wc = new WaitCallback((obj)=> { rm.ShowDialog(); });
-            ThreadPool.QueueUserWorkItem(wc);
+            //WaitCallback wc = new WaitCallback((obj)=> { rm.ShowDialog(); });
+            //ThreadPool.QueueUserWorkItem(wc);
+            Thread t = new Thread(()=> { rm.ShowDialog(); });
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
         }
     }
 }

@@ -9,9 +9,9 @@ namespace replacer
 {
     public class Rule
     {
-        public string Expression;
-        public string Replacement;
-        public Color RuleColor = Color.Blue;
-        public bool Enabled = true;
-    }
+        public string Expression { get; set; }
+        public string Replacement { get; set; }
+        public Color RuleColor { get; set; } = Color.Blue;
+        public bool Enabled { get; set; } = true;
+    }   
 }

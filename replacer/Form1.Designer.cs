@@ -40,7 +40,7 @@ namespace replacer
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.l_Message = new System.Windows.Forms.Label();
             this.cb_highlightControl = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.b_manageRules = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
@@ -57,7 +57,7 @@ namespace replacer
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel7, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.button1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.b_manageRules, 0, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 10);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
@@ -211,15 +211,18 @@ namespace replacer
             this.cb_highlightControl.UseVisualStyleBackColor = true;
             this.cb_highlightControl.CheckedChanged += new System.EventHandler(this.cb_highlightControl_CheckedChanged);
             // 
-            // button1
+            // b_manageRules
             // 
-            this.button1.Location = new System.Drawing.Point(3, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(87, 37);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.b_manageRules.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.b_manageRules.Location = new System.Drawing.Point(3, 3);
+            this.b_manageRules.Name = "b_manageRules";
+            this.b_manageRules.Size = new System.Drawing.Size(878, 39);
+            this.b_manageRules.TabIndex = 4;
+            this.b_manageRules.Text = "Manage Rules";
+            this.b_manageRules.UseVisualStyleBackColor = true;
+            this.b_manageRules.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -251,7 +254,7 @@ namespace replacer
         private System.Windows.Forms.Label l_Message;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private System.Windows.Forms.CheckBox cb_highlightControl;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button b_manageRules;
     }
 }
 

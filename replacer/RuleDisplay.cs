@@ -12,7 +12,10 @@ namespace replacer
 {
     public partial class RuleDisplay : UserControl
     {
-        private Rule rule;
+        public delegate void RuleChangedHandler();
+        public event RuleChangedHandler RuleChanged;
+        public event EventHandler RightClicked;
+        public Rule Rule { get; private set; }
         private bool isConstructor = false;
         public RuleDisplay()
         {
@@ -26,32 +29,36 @@ namespace replacer
         {
             isConstructor = true;
 
-            this.rule = rule;
-            tb_expression.Text = rule.Expression;
-            tb_replacement.Text = rule.Replacement;
+            this.Rule = rule;
+            rtb_expression.Text = rule.Expression;
+            rtb_replacement.Text = rule.Replacement;
             cb_ruleEnabled.Checked = rule.Enabled;
             pb_color.BackColor = rule.RuleColor;
 
             isConstructor = false;
         }
-        private void tb_expression_TextChanged(object sender, EventArgs e)
+        private void rtb_expression_TextChanged(object sender, EventArgs e)
         {
             //  Needed to stop an endless loop during construction
             if (isConstructor) return;
 
             //  Only runs after constructor
-            TextBox tb = (TextBox)sender;
-            rule.Expression = tb.Text;
+            RichTextBox tb = (RichTextBox)sender;
+            Rule.Expression = tb.Text;
+
+            RuleChanged?.Invoke();
         }
 
-        private void tb_replacement_TextChanged(object sender, EventArgs e)
+        private void rtb_replacement_TextChanged(object sender, EventArgs e)
         {
             //  Needed to stop an endless loop during construction
             if (isConstructor) return;
 
             //  Only runs after constructor
-            TextBox tb = (TextBox)sender;
-            rule.Replacement = tb.Text;
+            RichTextBox tb = (RichTextBox)sender;
+            Rule.Replacement = tb.Text;
+
+            RuleChanged?.Invoke();
         }
         private void cb_ruleEnabled_CheckedChanged(object sender, EventArgs e)
         {
@@ -60,7 +67,13 @@ namespace replacer
 
             //  Only runs after constructor
             CheckBox cb = (CheckBox)sender;
-            rule.Enabled = cb.Checked;
+            Rule.Enabled = cb.Checked;
+
+            RuleChanged?.Invoke();
+        }
+        private void controlRightClicked()
+        {
+            RightClicked?.Invoke(this, EventArgs.Empty);
         }
         private void pb_color_Click(object sender, EventArgs e)
         {
@@ -74,7 +87,16 @@ namespace replacer
 
             //  If dialog is OK
             pb.BackColor = cd.Color;
-            rule.RuleColor = cd.Color;
+            Rule.RuleColor = cd.Color;
+
+            RuleChanged?.Invoke();
+        }
+        private void mouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                controlRightClicked();
+            }
         }
     }
 }

@@ -12,7 +12,10 @@ namespace replacer
 {
     public partial class RuleDisplayCollection : UserControl
     {
+        public delegate void RuleChangedHandler();
+        public event RuleChangedHandler RuleChanged;
         private List<Rule> rules;
+        private int rightClickIndex = -5;
         public RuleDisplayCollection()
         {
             rules = new List<Rule>();
@@ -33,6 +36,13 @@ namespace replacer
                 rd.Width = panel1.Width;
                 rd.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                 rd.Location = new Point(0, rd.Height * n);
+                rd.RuleChanged += () => { RuleChanged?.Invoke(); };
+                
+                rd.RightClicked += (sender, e) => { 
+                    RuleDisplay rdi = (RuleDisplay)sender;
+                    rightClickIndex = rules.IndexOf(rdi.Rule);
+                    RightClickMenu.Show(this, rdi.Location);
+                };
                 panel1.Controls.Add(rd);
             }
         }
@@ -41,6 +51,53 @@ namespace replacer
             this.rules = rules;
             DisplayRules();
         }
+        public void DeleteRule(int ruleIndex)
+        {
+            rules.RemoveAt(ruleIndex);
+            DisplayRules();
+        }
+        private void swapRules(int q, int r)
+        {
+            Rule temp = rules[q];
+            rules[q] = rules[r];
+            rules[r] = temp;
+        }
+        private void moveUp(int index)
+        {
+            if (index <= 0 || index > rules.Count-1)
+            {
+                return;
+            }
+            swapRules(index, index - 1);
+        }
+        private void moveDown(int index)
+        {
+            if (index < 0 || index > rules.Count -2)
+            {
+                return;
+            }
 
+            swapRules(index, index + 1);
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DeleteRule(rightClickIndex);
+            RuleChanged?.Invoke();
+        }
+
+        private void helloToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            moveUp(rightClickIndex);
+            DisplayRules();
+            RuleChanged?.Invoke();
+        }
+
+        private void moveDownToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            moveDown(rightClickIndex);
+            DisplayRules();
+            RuleChanged?.Invoke();
+        }
     }
 }

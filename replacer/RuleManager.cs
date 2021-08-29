@@ -19,6 +19,7 @@ namespace replacer
         public RuleManager()
         {
             InitializeComponent();
+            this.ruleDisplayCollection1.RuleChanged += () => { RuleChanged?.Invoke(); };
             rules = new List<Rule>();
         }
         public void SetRules(List<Rule> rules)

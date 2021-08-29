@@ -29,7 +29,7 @@ namespace replacer
             {
                 foreach (Rule rule in rules)
                 {
-                    output = Regex.Replace(input, rule.Expression, rule.Replacement);
+                    output = Regex.Replace(output, rule.Expression, rule.Replacement);
                     l_Message.Text = "";
                 }
             }
@@ -44,6 +44,10 @@ namespace replacer
             rtb_Old.SelectAll();
             rtb_Old.SelectionColor = Color.Black;
             rtb_Old.SelectionBackColor = Color.White;
+        }
+        private Color chooseTextColor(Color bg)
+        {
+            return Color.FromArgb(255 - bg.R, 255 - bg.G, 255- bg.B);
         }
         private void highlight()
         {
@@ -60,8 +64,8 @@ namespace replacer
                     foreach (Match match in matches)
                     {
                         rtb_Old.Select(match.Index, match.Length);
-                        rtb_Old.SelectionColor = rule.RuleColor;
-                        rtb_Old.SelectionBackColor = Color.Blue;
+                        rtb_Old.SelectionBackColor = rule.RuleColor;
+                        rtb_Old.SelectionColor = chooseTextColor(rule.RuleColor);
                         rtb_Old.DeselectAll();
                     }
                 }

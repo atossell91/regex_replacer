@@ -72,7 +72,7 @@ namespace replacer
             List<Rule> newRules = JsonSerializer.Deserialize<List<Rule>>(content);
             rules.AddRange(newRules);
             ruleDisplayCollection1.DisplayRules();
-            RuleChanged?.Invoke();
+            //RuleChanged?.Invoke();
         }
     }
 }

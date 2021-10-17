@@ -46,7 +46,7 @@ namespace replacer
             RichTextBox tb = (RichTextBox)sender;
             Rule.Expression = tb.Text;
 
-            RuleChanged?.Invoke();
+            //RuleChanged?.Invoke();
         }
 
         private void rtb_replacement_TextChanged(object sender, EventArgs e)
@@ -58,7 +58,7 @@ namespace replacer
             RichTextBox tb = (RichTextBox)sender;
             Rule.Replacement = tb.Text;
 
-            RuleChanged?.Invoke();
+            //RuleChanged?.Invoke();
         }
         private void cb_ruleEnabled_CheckedChanged(object sender, EventArgs e)
         {
